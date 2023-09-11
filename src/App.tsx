@@ -18,6 +18,7 @@ import {
     monitorPageRoute,
     credentialPageRoute,
     healthCheckPageRoute,
+    registerFailedRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Services from './components/content/order/services/Services';
@@ -62,16 +63,18 @@ function App(): React.JSX.Element {
                             </OidcSecure>
                         }
                     />
-                    <Route
-                        path={registerPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={'isv'}>
-                                    <RegisterPanel />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
+                    {[registerPageRoute, registerFailedRoute].map((path) => (
+                        <Route
+                            path={path}
+                            element={
+                                <OidcSecure>
+                                    <Protected allowedRole={'isv'}>
+                                        <RegisterPanel />
+                                    </Protected>
+                                </OidcSecure>
+                            }
+                        />
+                    ))}
                     <Route
                         path={catalogPageRoute}
                         element={

@@ -5,7 +5,7 @@
 
 import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
 import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
@@ -15,6 +15,8 @@ import loadOclFile from '../common/ocl/loadOclFile';
 import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
 import { ValidationStatus } from '../common/ocl/ValidationStatus';
 import { useMutation } from '@tanstack/react-query';
+import { registerFailedRoute, registerPageRoute } from '../../utils/constants';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function RegisterPanel(): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
@@ -24,7 +26,8 @@ function RegisterPanel(): React.JSX.Element {
     const registerResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
-
+    const location = useLocation();
+    const navigate = useNavigate();
     const registerRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
             return ServiceVendorService.register(ocl);
@@ -41,6 +44,7 @@ function RegisterPanel(): React.JSX.Element {
             } else {
                 registerResult.current = [error.message];
             }
+            navigate(registerFailedRoute);
         },
     });
 
@@ -98,7 +102,24 @@ function RegisterPanel(): React.JSX.Element {
         setOclValidationStatus('notStarted');
         oclDisplayData.current = <></>;
         registerRequest.reset();
+        navigate(registerPageRoute);
     };
+
+    // useEffect to clean up state when 'register panel' is clicked after registration has failed.
+    useEffect(() => {
+        if (location.pathname === registerPageRoute) {
+            onRemove();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.pathname]);
+
+    // useEffect to route to /register URI when a user reloads the failed URI. Hence, this must be run only during component's first render.
+    useEffect(() => {
+        if (location.pathname.includes(registerFailedRoute)) {
+            navigate(registerPageRoute);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className={'register-content'}>
