@@ -5,7 +5,7 @@
 
 const trustedDomains = {
     default: {
-        oidcDomains: ['${REACT_APP_ZITADEL_AUTHORITY_URL}'],
-        accessTokenDomains: ['${REACT_APP_XPANSE_API_URL}'],
+        oidcDomains: ['${NEXT_PUBLIC_ZITADEL_AUTHORITY_URL}'],
+        accessTokenDomains: ['${NEXT_PUBLIC_XPANSE_API_URL}'],
     },
 };

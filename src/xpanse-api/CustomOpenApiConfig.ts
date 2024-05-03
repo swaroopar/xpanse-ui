@@ -6,9 +6,11 @@
 import { OpenAPI } from './generated';
 import { useOidcAccessToken } from '@axa-fr/react-oidc';
 import { env } from '../config/config';
+import nextConfig from '../../next.config.mjs';
+
 export const updateApiConfig = (): void => {
-    OpenAPI.BASE = env.REACT_APP_XPANSE_API_URL ?? '';
+    OpenAPI.BASE = nextConfig.publicRuntimeConfig?.xpanseApiUrl ?? '';
     // when service worker enabled, the access token is automatically injected by the oidc-react library.
     OpenAPI.TOKEN =
-        env.REACT_APP_AUTH_USE_SERVICE_WORKER_ONLY !== 'true' ? useOidcAccessToken().accessToken : undefined;
+        env.NEXT_PUBLIC_AUTH_USE_SERVICE_WORKER_ONLY !== 'true' ? useOidcAccessToken().accessToken : undefined;
 };

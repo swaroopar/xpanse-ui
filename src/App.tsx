@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './styles/app.css';
 import Home from './components/content/home/Home';
 import Protected from './components/protectedRoutes/ProtectedRoute';
@@ -50,182 +50,189 @@ const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
     return (
-        <QueryClientProvider client={queryClient}>
-            <OidcProvider configuration={OidcConfig} sessionLostComponent={SessionLost}>
-                <Routes>
-                    <Route
-                        key={homePageRoute}
-                        path={homePageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
-                                    <Home />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={''}
-                        path={''}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
-                                    <Home />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    {[registerPageRoute, registerFailedRoute, registerInvalidRoute, registerSuccessfulRoute].map(
-                        (path) => (
+        <BrowserRouter>
+            <React.StrictMode>
+                <QueryClientProvider client={queryClient}>
+                    <OidcProvider configuration={OidcConfig} sessionLostComponent={SessionLost}>
+                        <Routes>
                             <Route
-                                key={path}
-                                path={path}
+                                key={homePageRoute}
+                                path={homePageRoute}
                                 element={
                                     <OidcSecure>
-                                        <Protected allowedRole={['isv']}>
-                                            <RegisterPanel />
+                                        <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
+                                            <Home />
                                         </Protected>
                                     </OidcSecure>
                                 }
                             />
-                        )
-                    )}
-                    <Route
-                        key={catalogPageRoute}
-                        path={catalogPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv']}>
-                                    <CatalogMainPage />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={orderPageRoute}
-                        path={orderPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <OrderSubmitPage />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={servicesPageRoute}
-                        path={servicesPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Services />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={myServicesRoute}
-                        path={myServicesRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <MyServices />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={createServicePageRoute}
-                        path={createServicePageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <CreateService />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={monitorPageRoute}
-                        path={monitorPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Monitor />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={credentialPageRoute}
-                        path={credentialPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user', 'isv']}>
-                                    <Credentials />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={healthCheckPageRoute}
-                        path={healthCheckPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['admin']}>
-                                    <HealthCheckStatus />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={policiesRoute}
-                        path={policiesRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Policies />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={reportsRoute}
-                        path={reportsRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv']}>
-                                    <Reports />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={workflowsPageRoute}
-                        path={workflowsPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Workflows />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route
-                        key={serviceReviewsPageRoute}
-                        path={serviceReviewsPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={['csp']}>
-                                    <ServiceReviews />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
-                    <Route path='*' element={<NotFoundPage />} />
-                </Routes>
-            </OidcProvider>
-        </QueryClientProvider>
+                            <Route
+                                key={''}
+                                path={''}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
+                                            <Home />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            {[
+                                registerPageRoute,
+                                registerFailedRoute,
+                                registerInvalidRoute,
+                                registerSuccessfulRoute,
+                            ].map((path) => (
+                                <Route
+                                    key={path}
+                                    path={path}
+                                    element={
+                                        <OidcSecure>
+                                            <Protected allowedRole={['isv']}>
+                                                <RegisterPanel />
+                                            </Protected>
+                                        </OidcSecure>
+                                    }
+                                />
+                            ))}
+                            <Route
+                                key={catalogPageRoute}
+                                path={catalogPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['isv']}>
+                                            <CatalogMainPage />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={orderPageRoute}
+                                path={orderPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user']}>
+                                            <OrderSubmitPage />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={servicesPageRoute}
+                                path={servicesPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user']}>
+                                            <Services />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={myServicesRoute}
+                                path={myServicesRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user']}>
+                                            <MyServices />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={createServicePageRoute}
+                                path={createServicePageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user']}>
+                                            <CreateService />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={monitorPageRoute}
+                                path={monitorPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user']}>
+                                            <Monitor />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={credentialPageRoute}
+                                path={credentialPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user', 'isv']}>
+                                            <Credentials />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={healthCheckPageRoute}
+                                path={healthCheckPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['admin']}>
+                                            <HealthCheckStatus />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={policiesRoute}
+                                path={policiesRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user']}>
+                                            <Policies />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={reportsRoute}
+                                path={reportsRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['isv']}>
+                                            <Reports />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={workflowsPageRoute}
+                                path={workflowsPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['user']}>
+                                            <Workflows />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route
+                                key={serviceReviewsPageRoute}
+                                path={serviceReviewsPageRoute}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={['csp']}>
+                                            <ServiceReviews />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                            <Route path='*' element={<NotFoundPage />} />
+                        </Routes>
+                    </OidcProvider>
+                </QueryClientProvider>
+            </React.StrictMode>
+        </BrowserRouter>
     );
 }
 
