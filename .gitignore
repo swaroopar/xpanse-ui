@@ -16,3 +16,7 @@ node_modules
 build
 *.zip
 dist
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
